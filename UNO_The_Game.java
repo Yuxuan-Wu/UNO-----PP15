@@ -18,7 +18,9 @@ public class UNO_The_Game extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		
+		Uno g = new Uno(4);
+		g.game();
+
 	}
 
 	/**

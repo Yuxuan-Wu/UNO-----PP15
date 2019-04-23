@@ -2,10 +2,9 @@ import java.util.Scanner;
 
 public class Human_Player extends Player{
 
-	public Human_Player(String name, String status, int score, boolean isDealer) {
-		super(name, status, score, isDealer);
+	public Human_Player(String name) {
+		super(name);
 	}
-	
 	//a human player should be able to:
 	//pick a color for a wild card, 
 	//choose a card to deal, 
@@ -15,16 +14,23 @@ public class Human_Player extends Player{
 	public void wildPickColor() {
 		
 	}
-	
-	/*
-	public boolean playCard(Discard_Zone a) {
+
+	/*public boolean playCard(Deck a) {
 	       int x;
+	       String availableCards = "";
 	       System.out.println("it is your turn. Which card would you like to play? (Enter a number between 1 and the number of cards you are currently holding)");
+	       for (Integer b : checkCardInHand(a)) {
+	    	   availableCards += cardInHand.get(b.intValue()) + " with index of: " + b.intValue() + "\n";
+	       }
+	       System.out.println(availableCards);
 	       Scanner sc = new Scanner(System.in);
-	       x = sc.nextInt();
-	       if (check(cardInHand.get(x - 1), a)) {
-	           a.insert(cardInHand.remove(x - 1));
+	       x = Integer.parseInt(sc.nextLine());
+	       if (check(cardInHand.get(x), a)) {
+	           a.insert(cardInHand.remove(x));
+	           sc.close();
+	           return true;
 	       }
 	       sc.close();
+	       return false;
 	}*/
 }

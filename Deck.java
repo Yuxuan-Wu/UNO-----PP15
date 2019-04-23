@@ -44,6 +44,10 @@ public class Deck {
 		deck.add(new Number_Card(value, true, "green", value));
 	}
 	
+	public void insert(Card c) {
+        deck.add(0, c);
+    }
+	
 	public void shuffle() {
 		int r1;
 		int r2;

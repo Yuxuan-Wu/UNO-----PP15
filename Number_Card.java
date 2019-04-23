@@ -13,6 +13,6 @@ public class Number_Card extends Card {
 	}
 	
 	public String toString() {
-		return cardColor() + " numebr card with value of " + number;
+		return cardColor() + " number card with value of " + number;
 	}
 }

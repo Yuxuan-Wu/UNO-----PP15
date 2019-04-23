@@ -14,6 +14,10 @@ public abstract class Card {
 		this.effect = effect;
 	}
 	
+	public void setColor(String c) {
+		
+	}
+	
 	public String cardColor() {
 		return color;
 	}

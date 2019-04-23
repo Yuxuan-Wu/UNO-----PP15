@@ -1,6 +1,7 @@
 
 public class Discard_Zone extends Deck{
-    
+    Card lastCardPlayed;
+	
     public Discard_Zone() {
         super();
     }
@@ -10,6 +11,11 @@ public class Discard_Zone extends Deck{
     }
     
     public Card getTopCard() {
-        return deck.get(deck.size() - 1);
+    	if (deck.size() > 0) {
+    		lastCardPlayed = deck.get(deck.size() - 1);
+    		return deck.get(deck.size() - 1);
+    	}
+    	else 
+    		return lastCardPlayed;
     }
 }
