@@ -57,7 +57,7 @@ public class Uno {
 		//start a round
 		while (gameWinner() == null)
 			roundStart();
-		System.out.println("Winner is: " + gameWinner().getName());		
+		System.out.println("Winner is: " + gameWinner().getName() + " with the score of: " + gameWinner().getScore());		
 	}
 	
 	public void roundStart() {
