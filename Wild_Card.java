@@ -10,6 +10,6 @@ public class Wild_Card extends Card{
     }
     
     public String toString() {
-		return super.color + " wild card with " + super.effect;
+		return "\u001B[32m" + super.color + " wild card with " + super.effect + "\u001B[0m";
 	}
 }

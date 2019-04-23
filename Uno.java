@@ -121,12 +121,12 @@ public class Uno {
 	
 	public void play(Player p) {
 		if (p.playCard(discZone)) {
-			System.out.println(p.getName() + ": Card placed successfully");
+			//System.out.println(p.getName() + ": Card placed successfully");
 		}
 		else {
 			p.drawCard(drawDeck, discZone);
 			if (p.playCard(discZone)) {
-				System.out.println(p.getName() + ": Card placed successfully");
+				//System.out.println(p.getName() + ": Card placed successfully");
 			}
 			else
 				System.out.println(p.getName() + ": Turn forfeited");

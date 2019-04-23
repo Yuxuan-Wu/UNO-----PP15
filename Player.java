@@ -92,17 +92,18 @@ public abstract class Player {
    
    public ArrayList<Integer> checkCardInHand(Deck a) {
 	   ArrayList<Integer> cardsAvailable = new ArrayList<Integer>();
-	   boolean matchingCard = false;
+	   boolean matchingCard;
 	   for (int i = 0; i < cardInHand.size(); i ++) {
 		   if (cardInHand.get(i).cardEffect().compareTo("Draw 4") == 0) {
+			   matchingCard = false;
 			   for (int j = 0; j < cardInHand.size(); j ++) {
-				   if (cardInHand.get(j).cardColor().compareTo(a.getTopCard().cardColor()) == 0)
+				   //if there is no card in hand that has matching color with the top card on the discard zone, Draw 4 Wild can be used
+				   if (cardInHand.get(j).cardColor().compareTo(a.getTopCard().cardColor()) == 0 
+						   && cardInHand.get(j).cardColor().compareTo("Not determined") != 0)
 					   matchingCard = true;
 			   }
 			   if (!matchingCard) {
-				   cardsAvailable.add(i);
-				   matchingCard = false;
-			   }
+				   cardsAvailable.add(i);		   }
 		   }
 		   else if (check(cardInHand.get(i), a))
 			   cardsAvailable.add(i);

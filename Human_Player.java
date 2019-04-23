@@ -11,9 +11,9 @@ public class Human_Player extends Player{
 	//call uno, 
 	//
 	
-	public void wildPickColor() {
+	//public void wildPickColor() {
 		
-	}
+	//}
 
 	/*public boolean playCard(Deck a) {
 	       int x;
