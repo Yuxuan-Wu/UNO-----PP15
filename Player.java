@@ -50,7 +50,6 @@ public abstract class Player {
 	   case 3: w.setColor("blue");
 	   break;
 	   }
-	   //System.out.println("The wild card has color of: " + w.cardColor());
    }
    
    public boolean playCard(Deck a) {
@@ -147,6 +146,13 @@ public abstract class Player {
 	   return allCards;
    }
    
+   /*public String getDealableCardsInHand() {
+	   String dealableCards = name + " have: \n";
+	   for (int i = 0; i < )
+		   allCards += c + "\n";
+	   return allCards;
+   }*/
+   
    public int calculatePoints() {
 	   int totalPoint = 0;
 	   for (int i = 0; i < cardInHand.size(); i ++) 
@@ -154,8 +160,19 @@ public abstract class Player {
 	   return totalPoint;
    }
    
-   public boolean calledUno() {
+   public boolean unoPenalty() {
 	   return unoCalled;
+   }
+   
+   public void sayUno() {
+	   int randomFactor = (int) (Math.random() * 2);
+	   if (randomFactor == 1)
+		   unoCalled = true;
+	   //System.out.println("\u001B[31m" + name + " said uno!" + "\u001B[0m");
+   }
+   
+   public void setUnoCalled(boolean unoCalled) {
+	   this.unoCalled = unoCalled;
    }
    
    public void setActive(boolean active) {

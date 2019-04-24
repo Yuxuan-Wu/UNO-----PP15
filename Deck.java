@@ -63,6 +63,9 @@ public class Deck {
 			deck.set(r1, deck.get(r2));
 			deck.set(r2, tempCard);
  		}
+		//set all card to be effective
+		for (int i = 0; i < deck.size(); i ++)
+			deck.get(i).setEffective(true);
 	}
 	
 	public ArrayList<Card> getDeck() {

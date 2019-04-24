@@ -24,7 +24,7 @@ public class Uno {
 		//start a round
 		while (gameWinner() == null)
 			roundStart();
-		System.out.println("Winner is: " + gameWinner().getName() + " with the score of: " + gameWinner().getScore());	
+		//System.out.println("Winner is: " + gameWinner().getName() + " with the score of: " + gameWinner().getScore());	
 		//reset the game
 		gameReset();
 	}
@@ -40,6 +40,7 @@ public class Uno {
 			p.setActive(false);
 			p.setDealer(false);
 			p.removeHand();
+			p.setUnoCalled(false);
 		}
 	}
 	
@@ -57,28 +58,33 @@ public class Uno {
 			getPlayer(1).setActive(false);
 		}
 		nextTurn();
+		//System.out.println("Round starts!!!!!!! the dealer is: " + getPlayer(1).getName());
+		/*String playerStatus = "";
+		for (int i = 0; i < players.size(); i ++) 
+			playerStatus += " - Player: " + players.get(i).getName() + " has " + players.get(i).numOfCardHolding() + " card(s)\n";
+		System.out.print(playerStatus);*/
 		//the round starts
 		while (roundWinner() == null) {
 			getPlayer(1).setActive(true);
 			play(getPlayer(1));
 			//add card effect to the next player
-			if (discZone.getTopCard() instanceof Wild_Card || discZone.getTopCard() instanceof Action_Card) 
+			if ((discZone.getTopCard() instanceof Wild_Card 
+				|| discZone.getTopCard() instanceof Action_Card)
+				&& discZone.getTopCard().isEffective()) {
 				addEffect(getPlayer(2));
+				//the card is no longer effective after it's effect been added to the next player
+				discZone.getTopCard().setEffective(false);
+			}
 			//check if uno should be called
 			unoDetect(getPlayer(1));
 			//move on to the next player
 			getPlayer(1).setActive(false);
 			nextTurn();
-			//turnReport();
+			turnReport();
 		}
 		Player winnerOfTheRound = roundWinner();
 		//calculate and add the score to the winner
 		winnerOfTheRound.setScore(winnerOfTheRound.getScore() + countScore(winnerOfTheRound));
-		//set the dealer back to player
-		for (int i = 0; i < players.size(); i ++)
-			players.get(i).setDealer(false);
-		//set the winner of the round to be the dealer
-		winnerOfTheRound.setDealer(true);
 		//set the order for next round
 		setOrder();
 		for (Player p : players)
@@ -86,22 +92,31 @@ public class Uno {
 		//System.out.println("\u001B[31m" + "----------------------------------------------------" + "\u001B[0m");
 		//System.out.print(cardsToBeScored);
 		//System.out.println("\u001B[35m" + "Round winner is: " + roundWinner().getName() + " with the score of: " + roundWinner().getScore() + "\u001B[0m");
-		//remove every player's hand
-		for(Player p : players)
+		//reset the game
+		for(Player p : players) {
 			p.removeHand();
-		//reset the deck and the discard zone
+			p.setUnoCalled(false);
+			p.setDealer(false);
+		}
 		drawDeck = new Deck();
 		drawDeck.insert();
 		drawDeck.shuffle();
 		discZone = new Discard_Zone();
+		//set the winner of the round to be the dealer
+		winnerOfTheRound.setDealer(true);
+		
 	}
 	
 	public void turnReport() {
 		String playerStatus = "";
 		System.out.println("----------------------------------------------------");
-		System.out.println(getPlayer(1).getName() + " is the next player");
+		/*System.out.println(getPlayer(1).getName() + " is the next player");
 		for (int i = 0; i < players.size(); i ++) 
 			playerStatus += " - Player: " + players.get(i).getName() + " has " + players.get(i).numOfCardHolding() + " card(s)\n";
+		playerStatus += getPlayer(1).getCardsInHand();
+		System.out.print(playerStatus);*/
+		for (Integer i : orderOfPlay)
+			playerStatus += players.get(i.intValue() - 1).getName() + " ----> \n";
 		System.out.print(playerStatus);
 		System.out.println("----------------------------------------------------");
 	}
@@ -118,11 +133,14 @@ public class Uno {
 			//else
 				//System.out.println(p.getName() + ": Turn forfeited");
 		}
+		if (p.numOfCardHolding() == 1)
+			p.sayUno();
 	}
 	
 	public void flipCard() {
 		getPlayer(1).drawCard(drawDeck, discZone);
 		Card tempCard = getPlayer(1).takeCard(getPlayer(1).numOfCardHolding() - 1);
+		//System.out.println(tempCard + " was flipped over");
 		if (tempCard instanceof Wild_Card) {
 			if (tempCard.cardEffect().compareTo("No effect") == 0) {
 				//if it's a wild card, the player left of the dealer pick a color and plays
@@ -131,8 +149,11 @@ public class Uno {
 			else if (tempCard.cardEffect().compareTo("Draw 4") == 0) {
 				//if the top card flipped over by the dealer is a "draw 4 wild", 
 				//the card is placed back in deck and draw another card
+				//System.out.println(tempCard + " was flipped over, so the dealer will flip again");
 				drawDeck.insert(tempCard);
+				//flip for another time and will not insert this card
 				flipCard();
+				return;
 			}				
 		}
 		else if (tempCard instanceof Action_Card) {
@@ -254,9 +275,10 @@ public class Uno {
 	
 	public void unoDetect(Player p) {
 		if (p.numOfCardHolding() == 1) {
-			if (!p.calledUno()) {
+			if (!p.unoPenalty()) {
 				p.drawCard(drawDeck, discZone);
 				p.drawCard(drawDeck, discZone);	
+				//System.out.println(p.getName() + " didn't call uno");
 			}
 		}
 	}
