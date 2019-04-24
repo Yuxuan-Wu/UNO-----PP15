@@ -25,28 +25,32 @@ public abstract class Player {
 	   }
    }
    
+   public void removeHand() {
+	   cardInHand = new ArrayList<Card>();
+   }
+   
    public void swapDeck(Deck drawDeck, Deck discZone) {
 		//swap drawDeck with discardZone
 		drawDeck.setDeck(discZone.getDeck());
 		drawDeck.shuffle();
 		discZone.setDeck(new ArrayList<Card>());
-		System.out.println("!\n!\n!\n!\n\n\n\n\n\n\n\n\n\n\n\n");
+		//System.out.println("!\n!\n!\n!\n\n\n\n\n\n\n\n\n\n\n\n");
 	}
    
    public void wildPickColor(Card w) {
 	   int randomFactor = 0;
-	   randomFactor = (int) (Math.random()*5);
+	   randomFactor = (int) (Math.random()*4);
 	   switch(randomFactor) {
-	   case 1: w.setColor("red");
+	   case 0: w.setColor("red");
 	   break;
-	   case 2: w.setColor("green");
+	   case 1: w.setColor("green");
 	   break;
-	   case 3: w.setColor("yellow");
+	   case 2: w.setColor("yellow");
 	   break;
-	   case 4: w.setColor("blue");
+	   case 3: w.setColor("blue");
 	   break;
 	   }
-	   System.out.println("The wild card has color of: " + w.cardColor());
+	   //System.out.println("The wild card has color of: " + w.cardColor());
    }
    
    public boolean playCard(Deck a) {
@@ -60,10 +64,11 @@ public abstract class Player {
 		   }			   
 		   else
 			   a.insert(cardInHand.remove(avaliableCards.get(randomFactor).intValue()));
-	   	   System.out.println(name + ": A " + a.getTopCard() + " was placed on the discard zone");
+	   	   //System.out.println(name + ": A " + a.getTopCard() + " was placed on the discard zone");
 	   	   return true;
 	   }
-	   System.out.println(name + ": No card could be played");
+	   else
+		   //System.out.println(name + ": No card could be played");
 	   return false;
    }
    
@@ -133,6 +138,13 @@ public abstract class Player {
    
    public Card takeCard(int index) {
 	   return cardInHand.remove(index);
+   }
+   
+   public String getCardsInHand() {
+	   String allCards = name + " have: \n";
+	   for (Card c : cardInHand)
+		   allCards += c + "\n";
+	   return allCards;
    }
    
    public int calculatePoints() {

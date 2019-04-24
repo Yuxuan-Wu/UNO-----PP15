@@ -20,7 +20,6 @@ public class UNO_The_Game extends JFrame {
 	public static void main(String[] args) {
 		Uno g = new Uno(4);
 		g.game();
-
 	}
 
 	/**

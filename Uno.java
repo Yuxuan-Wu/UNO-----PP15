@@ -4,39 +4,6 @@ public class Uno {
 	Deck drawDeck, discZone;
 	ArrayList<Player> players;
 	ArrayList<Integer> orderOfPlay;
-	/*
-	1. 
-	2. object: first player who reach 500 points
-	3. 
-	4. 
-	5. beginning clockwise from the dealer x
-	6. player can only deal one card each turn 
-	 - a legal play is a card either matches the color number or symbol x
-	7. after shuffling, x
-	 - if the top card flipped over by the dealer is a "draw 4 wild", the card is placed back in deck and draw another card
-	 - if it's a wild card, the player left of the dealer pick a color and plays
-	 - if it's a draw 2 card, the player left of the dealer draw 2 cards and skips their turn
-	 - if it's a reverse card, the dealer goes first
-	 - if it's a skip, player to dealer's left misses a turn
-	8. skip: the next player forfeit their turn x
-	9. reverse: changes the direction of the play x
-	 - In a two-player game, the Reverse card acts like a Skip card; when played, the other player misses a turn. x
-	10. draw 2: the next player draws two card and forfeit their turn x
-	11. wild: maybe played on any color, and allows you to pick a color that the next player must follow x
-	12. draw 4 wild: does the same as the wild and in addition the next player has to draw 4 cards and skip their turn, however a draw 4 wild may only be played when you don't have a card in your hand matching the color played x
-	13. a wild card represent no color until they are played 
-	14. if you can't play in a turn, you draw one card, if that card can be played you may play it immediately, otherwise your turn is forfeited
-	15. you may also choose not to play on your turn but instead draw a card, if that card can be played your may only play that card or end your turn
-	16. when you get down to one card in your hand you must call uno, if you don't call uno by the time your second-to-last card touches the discard zone, any other player may catch you on this, if they did, before the next player plays, you must draw 2 cards
-	17. if the round hasn't ended and the draw deck runs out of cards shuffle the discard pile and it becomes the new draw deck
-	18. when a player plays the last card in their hand the round ends, if that card is a draw card the next player still fulfill the drawing, points are then scored 
-	19. the player who won that round goes out to receive point for every unplayed card in other players' hands
-	 - all cards 0 - 9 are worth face value
-	 - action cards are worth 20 points
-	 - wild cards are worth 50 points
-	20. if the round ends and none of the players have reached to 500 points, play another round
-	21. the winner of each round becomes the next rounds' dealer
-	*/
 	
 	public Uno(int numOfPlayers) {
 		drawDeck = new Deck();
@@ -57,34 +24,41 @@ public class Uno {
 		//start a round
 		while (gameWinner() == null)
 			roundStart();
-		System.out.println("Winner is: " + gameWinner().getName() + " with the score of: " + gameWinner().getScore());		
+		System.out.println("Winner is: " + gameWinner().getName() + " with the score of: " + gameWinner().getScore());	
+		//reset the game
+		gameReset();
 	}
 	
+	public void gameReset() {
+		drawDeck = new Deck();
+		drawDeck.insert();
+		drawDeck.shuffle();
+		discZone = new Discard_Zone();
+		orderOfPlay = new ArrayList<Integer>();
+		for (Player p : players) {
+			p.setScore(0);
+			p.setActive(false);
+			p.setDealer(false);
+			p.removeHand();
+		}
+	}
+	
+	//object for each round: to be the first player who have empty hand
 	public void roundStart() {
+		String cardsToBeScored = "";
 		//deal 7 cards to each player
 		for (int i = 0; i < players.size(); i ++) 
 			for (int j = 0; j < 7; j ++) 
 				players.get(i).drawCard(drawDeck, discZone);
 		//after dealing the dealer flips over the top card of the deck
 		flipCard();
-		//object for each round: to be the first player who have empty hand
 		if (getPlayer(1).isActive()) {
 			play(getPlayer(1));
 			getPlayer(1).setActive(false);
 		}
 		nextTurn();
+		//the round starts
 		while (roundWinner() == null) {
-			//let the current player play, if the player can't cast a card, 
-			//if you can't play in a turn, you draw one card, 
-			//if that card can be played you may play it immediately, otherwise your turn is forfeited
-			//when you get down to one card in your hand you must call uno, if you don't call uno by the time your second-to-last card touches the discard zone, any other player may catch you on this, if they did, before the next player plays, you must draw 2 cards
-			//if the round hasn't ended and the draw deck runs out of cards shuffle the discard pile and it becomes the new draw deck x
-			//when a player plays the last card in their hand the round ends, if that card is a draw card the next player still fulfill the drawing, points are then scored x
-			
-			//let the player draw from the draw deck
-			
-			//if the player has no card that can be played
-			// - let the player draw a card, if the card matches the top card of discard zone can be played, or the turn will be forfeited
 			getPlayer(1).setActive(true);
 			play(getPlayer(1));
 			//add card effect to the next player
@@ -95,7 +69,7 @@ public class Uno {
 			//move on to the next player
 			getPlayer(1).setActive(false);
 			nextTurn();
-			turnReport();
+			//turnReport();
 		}
 		Player winnerOfTheRound = roundWinner();
 		//calculate and add the score to the winner
@@ -107,6 +81,19 @@ public class Uno {
 		winnerOfTheRound.setDealer(true);
 		//set the order for next round
 		setOrder();
+		for (Player p : players)
+			cardsToBeScored += p.getCardsInHand();
+		//System.out.println("\u001B[31m" + "----------------------------------------------------" + "\u001B[0m");
+		//System.out.print(cardsToBeScored);
+		//System.out.println("\u001B[35m" + "Round winner is: " + roundWinner().getName() + " with the score of: " + roundWinner().getScore() + "\u001B[0m");
+		//remove every player's hand
+		for(Player p : players)
+			p.removeHand();
+		//reset the deck and the discard zone
+		drawDeck = new Deck();
+		drawDeck.insert();
+		drawDeck.shuffle();
+		discZone = new Discard_Zone();
 	}
 	
 	public void turnReport() {
@@ -128,8 +115,8 @@ public class Uno {
 			if (p.playCard(discZone)) {
 				//System.out.println(p.getName() + ": Card placed successfully");
 			}
-			else
-				System.out.println(p.getName() + ": Turn forfeited");
+			//else
+				//System.out.println(p.getName() + ": Turn forfeited");
 		}
 	}
 	
