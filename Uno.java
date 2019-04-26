@@ -12,7 +12,6 @@ public class Uno {
 		discZone = new Discard_Zone();
 		players = new ArrayList<Player>();
 		orderOfPlay = new ArrayList<Integer>();
-		//need to be fixed
 		players.add(new Human_Player("Charles"));
 		for (int i = 1; i < numOfPlayers; i ++) 
 			players.add(new Bot_Player("Bot_Player No." + i));
@@ -24,7 +23,9 @@ public class Uno {
 		//start a round
 		while (gameWinner() == null)
 			roundStart();
-		//System.out.println("Winner is: " + gameWinner().getName() + " with the score of: " + gameWinner().getScore());	
+		System.out.println("=============================================================");
+		System.out.println("Winner of the game is: " + gameWinner().getName() + " with the score of: " + gameWinner().getScore());	
+		System.out.println("=============================================================");
 		//reset the game
 		gameReset();
 	}
@@ -46,7 +47,7 @@ public class Uno {
 	
 	//object for each round: to be the first player who have empty hand
 	public void roundStart() {
-		String cardsToBeScored = "";
+		//String cardsToBeScored = "";
 		//deal 7 cards to each player
 		for (int i = 0; i < players.size(); i ++) 
 			for (int j = 0; j < 7; j ++) 
@@ -58,11 +59,11 @@ public class Uno {
 			getPlayer(1).setActive(false);
 		}
 		nextTurn();
-		//System.out.println("Round starts!!!!!!! the dealer is: " + getPlayer(1).getName());
-		/*String playerStatus = "";
+		System.out.println("The round starts! The dealer is: " + getPlayer(1).getName());
+		String playerStatus = "";
 		for (int i = 0; i < players.size(); i ++) 
 			playerStatus += " - Player: " + players.get(i).getName() + " has " + players.get(i).numOfCardHolding() + " card(s)\n";
-		System.out.print(playerStatus);*/
+		System.out.print(playerStatus);
 		//the round starts
 		while (roundWinner() == null) {
 			getPlayer(1).setActive(true);
@@ -80,18 +81,19 @@ public class Uno {
 			//move on to the next player
 			getPlayer(1).setActive(false);
 			nextTurn();
-			turnReport();
+			//turnReport();
 		}
 		Player winnerOfTheRound = roundWinner();
 		//calculate and add the score to the winner
 		winnerOfTheRound.setScore(winnerOfTheRound.getScore() + countScore(winnerOfTheRound));
 		//set the order for next round
 		setOrder();
-		for (Player p : players)
-			cardsToBeScored += p.getCardsInHand();
-		//System.out.println("\u001B[31m" + "----------------------------------------------------" + "\u001B[0m");
+		//for (Player p : players)
+			//cardsToBeScored += p.getCardsInHand();
+		System.out.println("---------------------xxxxxxxxxxxxxxxxxxx---------------------");
 		//System.out.print(cardsToBeScored);
-		//System.out.println("\u001B[35m" + "Round winner is: " + roundWinner().getName() + " with the score of: " + roundWinner().getScore() + "\u001B[0m");
+		System.out.println("Round winner is: " + roundWinner().getName() + " with the score of: " + roundWinner().getScore());
+		System.out.println("---------------------xxxxxxxxxxxxxxxxxxx---------------------");
 		//reset the game
 		for(Player p : players) {
 			p.removeHand();
@@ -108,17 +110,12 @@ public class Uno {
 	}
 	
 	public void turnReport() {
-		String playerStatus = "";
-		System.out.println("----------------------------------------------------");
-		/*System.out.println(getPlayer(1).getName() + " is the next player");
-		for (int i = 0; i < players.size(); i ++) 
-			playerStatus += " - Player: " + players.get(i).getName() + " has " + players.get(i).numOfCardHolding() + " card(s)\n";
-		playerStatus += getPlayer(1).getCardsInHand();
-		System.out.print(playerStatus);*/
-		for (Integer i : orderOfPlay)
-			playerStatus += players.get(i.intValue() - 1).getName() + " ----> \n";
-		System.out.print(playerStatus);
-		System.out.println("----------------------------------------------------");
+		//String playerStatus = "";
+		System.out.println("--------------------MMMMMMMMMMMMMMMMMMMMM--------------------");
+		System.out.println(getPlayer(1).getName() + " is the next player");
+		System.out.println("The current order is: ");
+		printOrder();
+		System.out.println("--------------------WWWWWWWWWWWWWWWWWWWWW--------------------");
 	}
 	
 	public void play(Player p) {
@@ -140,7 +137,7 @@ public class Uno {
 	public void flipCard() {
 		getPlayer(1).drawCard(drawDeck, discZone);
 		Card tempCard = getPlayer(1).takeCard(getPlayer(1).numOfCardHolding() - 1);
-		//System.out.println(tempCard + " was flipped over");
+		System.out.println(tempCard + " was flipped over");
 		if (tempCard instanceof Wild_Card) {
 			if (tempCard.cardEffect().compareTo("No effect") == 0) {
 				//if it's a wild card, the player left of the dealer pick a color and plays
@@ -149,7 +146,7 @@ public class Uno {
 			else if (tempCard.cardEffect().compareTo("Draw 4") == 0) {
 				//if the top card flipped over by the dealer is a "draw 4 wild", 
 				//the card is placed back in deck and draw another card
-				//System.out.println(tempCard + " was flipped over, so the dealer will flip again");
+				System.out.println(tempCard + " was flipped over, so the dealer will flip again");
 				drawDeck.insert(tempCard);
 				//flip for another time and will not insert this card
 				flipCard();
@@ -177,8 +174,10 @@ public class Uno {
 	
 	public void initializeGame() {
 		int r1, r2, temp;
-		for (int i = 1; i <= players.size(); i ++) 
-			orderOfPlay.add(i);
+		System.out.println("Welcome to the game UNO, "
+				+ "\nthis game allows one human player and 1 to 3 bot players to participate, and uses the official uno rule");
+		for (int i = 0; i < players.size(); i ++) 
+			orderOfPlay.add(i + 1);
 		for (int i = 0; i < 10; i ++) {
 			r1 = (int)(Math.random() * players.size()); 
 			r2 = (int)(Math.random() * players.size()); 
@@ -278,9 +277,16 @@ public class Uno {
 			if (!p.unoPenalty()) {
 				p.drawCard(drawDeck, discZone);
 				p.drawCard(drawDeck, discZone);	
-				//System.out.println(p.getName() + " didn't call uno");
+				System.out.println(p.getName() + " didn't call uno, draw 2 cards");
 			}
 		}
+	}
+	
+	public void printOrder() {
+		String order = "";
+		for (int i = 1; i <= players.size(); i ++) 
+			order += i + ". " + getPlayer(i).getName() + "\n";
+		System.out.print(order);
 	}
 	
 	public int countScore(Player winner) {
@@ -295,19 +301,23 @@ public class Uno {
 	public void addEffect(Player player) {
 		if (discZone.getTopCard().cardEffect().compareTo("Skip") == 0) {
 			nextTurn();
+			System.out.println(player.getName() + " is skipped");
 		}
 		else if (discZone.getTopCard().cardEffect().compareTo("Draw 2") == 0) {
 			player.drawCard(drawDeck, discZone);
 			player.drawCard(drawDeck, discZone);
 			nextTurn();
+			System.out.println(player.getName() + " is skipped");
 		}
-		else if (discZone.getTopCard().cardEffect().compareTo("Reverse") == 0)
+		else if (discZone.getTopCard().cardEffect().compareTo("Reverse") == 0) {
 			reverseOrder();	
+			System.out.println("The order is reversed");
+		}
 		else if (discZone.getTopCard().cardEffect().compareTo("Draw 4") == 0) {
 			for (int i = 0; i < 4; i ++)
 				player.drawCard(drawDeck, discZone);
 			nextTurn();
+			System.out.println(player.getName() + " is skipped");
 		}
 	}
-	
 }

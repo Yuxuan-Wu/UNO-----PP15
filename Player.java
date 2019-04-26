@@ -168,7 +168,7 @@ public abstract class Player {
 	   int randomFactor = (int) (Math.random() * 2);
 	   if (randomFactor == 1)
 		   unoCalled = true;
-	   //System.out.println("\u001B[31m" + name + " said uno!" + "\u001B[0m");
+	   System.out.println("\u001B[31m" + name + " said uno!" + "\u001B[0m");
    }
    
    public void setUnoCalled(boolean unoCalled) {
