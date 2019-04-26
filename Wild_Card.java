@@ -10,6 +10,30 @@ public class Wild_Card extends Card{
     }
     
     public String toString() {
-		return "\u001B[32m" + super.color + " wild card with " + super.effect + "\u001B[0m";
+    	String output = "";
+    	output += ("--------------------\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		if (cardColor() == "yellow") 
+	    	output += ("|      Yellow      |\n");
+	    else if (cardColor() == "red") 
+	    	output += ("|       Red        |\n");
+	   	else if (cardColor() == "green") 
+	   		output += ("|       Green      |\n");
+	   	else if (cardColor() == "blue") 
+	   		output += ("|       Blue       |\n");
+	   	else 
+    		output += ("|                  |\n");
+		if (cardEffect().compareTo("No effect") == 0) 
+			output += ("|       Wild       |\n");
+		else 
+			output += ("|    Wild draw 4   |\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("--------------------\n");
+		return output;
 	}
 }

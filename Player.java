@@ -34,7 +34,7 @@ public abstract class Player {
 		drawDeck.setDeck(discZone.getDeck());
 		drawDeck.shuffle();
 		discZone.setDeck(new ArrayList<Card>());
-		//System.out.println("!\n!\n!\n!\n\n\n\n\n\n\n\n\n\n\n\n");
+		System.out.println("The draw deck runs out of card, now the card in discard zone will be used to replenish the draw deck");
 	}
    
    public void wildPickColor(Card w) {
@@ -63,11 +63,11 @@ public abstract class Player {
 		   }			   
 		   else
 			   a.insert(cardInHand.remove(avaliableCards.get(randomFactor).intValue()));
-	   	   //System.out.println(name + ": A " + a.getTopCard() + " was placed on the discard zone");
+	   	   System.out.println(name + ": \n" + a.getTopCard());
 	   	   return true;
 	   }
 	   else
-		   //System.out.println(name + ": No card could be played");
+		   System.out.println(name + ": No card could be played");
 	   return false;
    }
    
@@ -168,7 +168,7 @@ public abstract class Player {
 	   int randomFactor = (int) (Math.random() * 2);
 	   if (randomFactor == 1)
 		   unoCalled = true;
-	   System.out.println("\u001B[31m" + name + " said uno!" + "\u001B[0m");
+	   System.out.println(name + " said uno!");
    }
    
    public void setUnoCalled(boolean unoCalled) {

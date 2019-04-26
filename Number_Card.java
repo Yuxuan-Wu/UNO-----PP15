@@ -13,6 +13,31 @@ public class Number_Card extends Card {
 	}
 	
 	public String toString() {
-		return cardColor() + " number card with value of " + number;
+		String output = "";
+		output += ("--------------------\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		if (cardColor() == "yellow") {
+    		output += ("|      Yellow      |\n");
+    		output += ("|        " + number + "         |\n");
+    	} else if (cardColor() == "red") {
+    		output += ("|       Red        |\n");
+    		output += ("|        " + number + "         |\n");
+    	}
+    	else if (cardColor() == "green") {
+    		output += ("|       Green      |\n");
+    		output += ("|         " + number + "        |\n");
+    	}
+    	else if (cardColor() == "blue") {
+    		output += ("|       Blue       |\n");
+    		output += ("|        " + number + "         |\n");
+    	}
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("|                  |\n");
+		output += ("--------------------\n");
+		return output;
 	}
 }
